@@ -107,9 +107,11 @@ export default {
       this.favorite = !this.favorite;
     },
     _initScroll() {
-      this.scroll = new BScroll(this.$refs.seller, {
-        click: true
-      });
+      this.$nextTick(() => {
+        this.scroll = new BScroll(this.$refs.seller, {
+          click: true
+        });
+      })
     },
     _initPics() {
       if (this.seller.pics) {
