@@ -86,8 +86,27 @@ export default {
   },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-    this._initScroll();
-    this._initPics();
+    this.$nextTick(() => {
+        this.scroll = new BScroll(this.$refs.seller, {
+          click: true
+        });
+      })
+   if (this.seller.pics) {
+        let picWidth = 120;
+        let margin = 6;
+        let width = (picWidth + margin) * this.seller.pics.length - margin;
+        this.$refs.picList.style.width = width + 'px';
+        this.$nextTick(() => {
+          if (!this.picScroll) {
+            this.picScroll = new BScroll(this.$refs.picWrapper, {
+              scrollX: true,
+              eventPassthrough: 'vertical'
+            });
+          } else {
+            this.picScroll.refresh();
+          }
+        });
+      }
   },
   // watch: {
   //   'seller'() {
@@ -105,31 +124,6 @@ export default {
         return;
       }
       this.favorite = !this.favorite;
-    },
-    _initScroll() {
-      this.$nextTick(() => {
-        this.scroll = new BScroll(this.$refs.seller, {
-          click: true
-        });
-      })
-    },
-    _initPics() {
-      if (this.seller.pics) {
-        let picWidth = 120;
-        let margin = 6;
-        let width = (picWidth + margin) * this.seller.pics.length - margin;
-        this.$refs.picList.style.width = width + 'px';
-        this.$nextTick(() => {
-          if (!this.picScroll) {
-            this.picScroll = new BScroll(this.$refs.picWrapper, {
-              scrollX: true,
-              eventPassthrough: 'vertical'
-            });
-          } else {
-            this.picScroll.refresh();
-          }
-        });
-      }
     }
   },
   components: {
