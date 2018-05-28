@@ -86,11 +86,7 @@ export default {
   },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.seller, {
-        click: true
-      });
-    });
+    this._initScroll();
     this._initPics();
   },
   // watch: {
@@ -110,11 +106,11 @@ export default {
       }
       this.favorite = !this.favorite;
     },
-    // _initScroll() {
-    //   this.scroll = new BScroll(this.$refs.seller, {
-    //     click: true
-    //   });
-    // },
+    _initScroll() {
+      this.scroll = new BScroll(this.$refs.seller, {
+        click: true
+      });
+    },
     _initPics() {
       if (this.seller.pics) {
         let picWidth = 120;
