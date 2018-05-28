@@ -70,7 +70,6 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
-  import {saveToLocal, loadFromLocal} from '../assets/js/store';
   import star from './star';
   import split from './split';
 
@@ -80,13 +79,6 @@
         type: Object
       }
     },
-    data() {
-      return {
-        favorite: (() => {
-          return loadFromLocal(this.seller.id, 'favorite', false);
-        })()
-      };
-    },
     computed: {
       favoriteText() {
         return this.favorite ? '已收藏' : '收藏';
@@ -94,52 +86,54 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+      axios.get('/good/seller').then(res => {
+        if (res.data.code === 0) {
+            this.scroll = new BScroll(this.$refs.seller, {
+              click: true
+            });
+        }
+      });
     },
-    watch: {
-      'seller'() {
-        this._initScroll();
-        this._initPics();
-      }
-    },
-    ready() {
-      this._initScroll();
-      this._initPics();
-    },
+    // watch: {
+    //   'seller'() {
+    //     this._initScroll();
+    //     this._initPics();
+    //   }
+    // },
+    // ready() {
+    //   this._initScroll();
+    //   this._initPics();
+    // },
     methods: {
       toggleFavorite(event) {
         if (!event._constructed) {
           return;
         }
         this.favorite = !this.favorite;
-        saveToLocal(this.seller.id, 'favorite', this.favorite);
       },
-      _initScroll() {
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.seller, {
-            click: true
-          });
-        } else {
-          this.scroll.refresh();
-        }
-      },
-      _initPics() {
-        if (this.seller.pics) {
-          let picWidth = 120;
-          let margin = 6;
-          let width = (picWidth + margin) * this.seller.pics.length - margin;
-          this.$refs.picList.style.width = width + 'px';
-          this.$nextTick(() => {
-            if (!this.picScroll) {
-              this.picScroll = new BScroll(this.$refs.picWrapper, {
-                scrollX: true,
-                eventPassthrough: 'vertical'
-              });
-            } else {
-              this.picScroll.refresh();
-            }
-          });
-        }
-      }
+      // _initScroll() {
+      //   this.scroll = new BScroll(this.$refs.seller, {
+      //     click: true
+      //   });
+      // },
+      // _initPics() {
+      //   if (this.seller.pics) {
+      //     let picWidth = 120;
+      //     let margin = 6;
+      //     let width = (picWidth + margin) * this.seller.pics.length - margin;
+      //     this.$refs.picList.style.width = width + 'px';
+      //     this.$nextTick(() => {
+      //       if (!this.picScroll) {
+      //         this.picScroll = new BScroll(this.$refs.picWrapper, {
+      //           scrollX: true,
+      //           eventPassthrough: 'vertical'
+      //         });
+      //       } else {
+      //         this.picScroll.refresh();
+      //       }
+      //     });
+      //   }
+      // }
     },
     components: {
       star,
