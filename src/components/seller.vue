@@ -86,7 +86,7 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-      axios.get('/good/seller').then(res => {
+      this.$nextTick(() => {
         if (res.data.code === 0) {
             this.scroll = new BScroll(this.$refs.seller, {
               click: true
